@@ -90,10 +90,10 @@ int main(void) {
     DDRD |= (1 << 1);
     DDRD |= (1 << 2);
     
-    //uint16_t val = 0;
-    //int i;
-    //uint32_t t = 0;
-    //uint32_t x = 1;
+    uint16_t val = 0;
+    int i;
+    uint32_t t = 0;
+    uint32_t x = 1;
 
 
 	ADMUX |= (1 << REFS0);
@@ -108,31 +108,28 @@ int main(void) {
     SPCR = (1 << SPE) | (1 << MSTR);
     SPSR = (1 << SPI2X);
 
-    metro m;  
-    metro_init(&m); 
- 
     while(1) {
-        //adc_read_10(&x, 1);
+        adc_read_10(&x, 1);
 
-        ////x %= 0xff;       
+        //x %= 0xff;       
  
-        //val = t*(((t>>12)|(t>>8))&(x&(t>>4)));
+        val = t*(((t>>12)|(t>>8))&(x&(t>>4)));
 
-        //val %= 0xfff;
+        val %= 0xfff;
 
 
-        //dac_write(val, 0);
+        dac_write(val, 0);
 
-        //if(val > 0xff) {         
-        //    PORTD |= (1 << 1);
-        //    PORTD |= (1 << 2);
-        //} else {
-        //    PORTD &= ~(1 << 1);
-        //    PORTD &= ~(1 << 2);
-        //}
+        if(val > 0xff) {         
+            PORTD |= (1 << 1);
+            PORTD |= (1 << 2);
+        } else {
+            PORTD &= ~(1 << 1);
+            PORTD &= ~(1 << 2);
+        }
 
-        //t = (t + 1) % 0xffffffff;
-        //_delay_ms(4);
+        t = (t + 1) % 0xffffffff;
+        _delay_ms(4);
 
     }
     return 0;
